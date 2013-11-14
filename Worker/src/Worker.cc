@@ -1,17 +1,18 @@
 #include "TProcessor.h"
 #include "TRint.h"
 #include "TThread.h"
-#include "TRandom3.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 #include <sys/types.h>
 #include <unistd.h>
+#include <cstring>
 
 #define CORES 16
 
 TProcessor* Proc[CORES];
-TThread*    Work[CORES];
+TThread* Work[CORES];
 
 //-----------------------------------------------------------------------------
 
@@ -22,40 +23,63 @@ void StartThread(Int_t Number)
 
 //-----------------------------------------------------------------------------
 
-Int_t Negotiate(Int_t GUID)
+Int_t Negotiate(Int_t pid, Int_t nThreads)
 {
   Char_t Buffer[256];
-  Int_t Workers = 0;
-  Int_t Chips = CORES;
-  FILE* Flag;
+  Int_t instances = 0;
+  Int_t runThreads = nThreads;
+  std::vector<pid_t> pids;
+  FILE* f;
 
   //Create flag file for this Worker process
-  sprintf(Buffer, "/tmp/Worker%d", GUID);
-  Flag = fopen(Buffer, "w");
-  if(Flag)
-    fclose(Flag);
-  else //Terminate if flag file couldn't be created
+  sprintf(Buffer, "/tmp/Worker%d", pid);
+  f = fopen(Buffer, "w");
+  if(!f)  //Terminate if flag file couldn't be created
   {
-    printf("Error: Couldn't negotiate number of cores\n");
-    exit(0);
+    printf("Error: Couldn't negotiate number of threads\n");
+    exit(1);
   }
 
-  //Search for and count all Worker flag files
-  for(Int_t t=1; t<1000; t++)
+  //Search for running Worker instances and count corresponding threads
+  char line[1024];
+  FILE *cmd = popen("pidof Worker", "r");
+  fgets(line, 1024, cmd);
+  //pid_t pid = strtoul(line, NULL, 10);
+  char *pid_ptr;
+  //split pids of current Worker instances 
+  pid_ptr = strtok(line, " ");
+  while(pid_ptr != NULL){
+    pids.push_back(strtoul(pid_ptr, NULL, 0));
+    pid_ptr = strtok(NULL, " ");
+  }
+  pclose(cmd);
+  //instances = pids.size();
+
+  FILE* flag;
+  int t;
+  //Search for all Worker flag files and count running threads
+  for(std::vector<pid_t>::iterator it = pids.begin(); it != pids.end(); ++it)
   {
-    sprintf(Buffer, "/tmp/Worker%d", t);
-    Flag = fopen(Buffer, "r");
-    if(Flag)
+    if(int(*it) == pid) continue;  //do not consider pid of this Worker
+    sprintf(Buffer, "/tmp/Worker%d", *it);
+    flag = fopen(Buffer, "r");
+    if(flag)
     {
-      fclose(Flag);
-      Workers++;
+      fscanf(flag, "%d", &t);
+      fclose(flag);
+      instances += t;
     }
   }
 
   //Calculate (with rounding-down) a fair share of all cores
-  if(Workers) Chips = CORES/Workers;
-  if(Chips < 1) Chips = 1;
-  return Chips;
+  if(instances) runThreads = ((4*CORES-instances) / pids.size())*4 / (nThreads/2+1);  //try to compute number of used threads regarding the total amount of running threads and the users desired thread count
+  if(runThreads < 1) runThreads = 1;
+  if(runThreads > nThreads) runThreads = nThreads;
+  //write number of threads to file
+  fprintf(f, "%d", runThreads);  //write running threads to file and read it to determine overall threads running via pid (with this method killed workers aren't considered)
+  fclose(f);
+
+  return runThreads;
 }
 
 //-----------------------------------------------------------------------------
@@ -66,9 +90,10 @@ int main(int argc, char **argv)
   Int_t CountDat = 0;
   Int_t Count;
   Int_t Process;
-  Int_t Chips;
-  Int_t ChipsOld;
-  Int_t GUID;
+  Int_t runThreads;  //threads started within this Worker instance
+  Int_t runThreadsOld;
+  pid_t pid;
+  Int_t nThreads = 8;  //user's choice of threads to run
   Bool_t Offline = false;
   Bool_t Busy;
   Char_t Config[256];
@@ -95,13 +120,17 @@ int main(int argc, char **argv)
     {
       if(!strcmp("--offline", argv[i])) Offline = true;
       if(!strcmp("-o", argv[i])) Offline = true;
+      if(!strcmp("--threads", argv[i])) sscanf(argv[i+1], "%d", &nThreads);
+      if(!strcmp("-t", argv[i])) sscanf(argv[i+1], "%d", &nThreads);
     }
 
-  //Create unique ID for this Worker process
-  gRandom->SetSeed(getpid());
-  GUID = (int)(gRandom->Rndm()*999)+1;
-  //Negotiate number of cores (depending on number of already running Worker processes)
-  Chips = Negotiate(GUID);
+  //check if nThreads is low enough, otherwise set it to the maximum CORES
+  if(nThreads > CORES) nThreads = CORES;
+
+  //Get current system pid of this Worker process
+  pid = getpid();
+  //Negotiate number of threads (depending on number of already running Worker processes)
+  runThreads = Negotiate((int)pid, nThreads);
 
   //Print useless startup information
   printf("\n*** Worker - parallel AcquRoot processing ***\n\n");
@@ -109,7 +138,7 @@ int main(int argc, char **argv)
     printf("Using offline mode (processing .rd0 files)\n");
   else
     printf("Using Dataserver mode (processing .dat files)\n");
-  printf("Using %d cores\n", Chips);
+  printf("Using maximum %d threads\n", nThreads);
   printf("Using AcquRoot configuration from file %s\n", Config);
 
   //For path-less config filename, append 'data' directory
@@ -154,7 +183,7 @@ int main(int argc, char **argv)
     if(!Slash)
     {
       sprintf(Buffer[0], "data/%s", Server);
-     strcpy(Server, Buffer[0]);
+      strcpy(Server, Buffer[0]);
     }
 
     //Open server file and search for .dat file names
@@ -182,8 +211,8 @@ int main(int argc, char **argv)
     fclose(ServerFile);
   }
 
-  //Create worker threads for all cores
-  for(Int_t Number=0; Number<CORES; Number++)
+  //Create worker threads
+  for(Int_t Number=0; Number < nThreads; Number++)
   {
     sprintf(Buffer[0], "Processor%d", Number);
     Proc[Number] = new TProcessor(Buffer[0]);
@@ -200,7 +229,7 @@ int main(int argc, char **argv)
   Process = 0;
   while(Process < Count)
   {
-    for(Int_t Number=0; Number<Chips; Number++)
+    for(Int_t Number=0; Number < runThreads; Number++)
     {
       if(!(Proc[Number]->GetRunning()))
       {
@@ -212,15 +241,15 @@ int main(int argc, char **argv)
         ThreadConfig = fopen(Buffer[0], "w");
         fprintf(ThreadConfig, "%s", ConfigText);
         if(Offline)
-          fprintf(ThreadConfig, "\nTreeFile:  %s\n", NameRd0[Process]);
+          fprintf(ThreadConfig, "\nTreeFile: %s\n", NameRd0[Process]);
         else
         {
           sprintf(Buffer[1], "Thread%XServer.dat", Number);
-          fprintf(ThreadConfig, "\nServerSetup:  %s\n", Buffer[1]);
+          fprintf(ThreadConfig, "\nServerSetup: %s\n", Buffer[1]);
           sprintf(Buffer[1], "data/Thread%XServer.dat", Number);
           ThreadServer = fopen(Buffer[1], "w");
           fprintf(ThreadServer, "%s", ServerText);
-          fprintf(ThreadServer, "\nFile-Name:  %s  %d  %d\n", NameDat[Process], Records[Process][0], Records[Process][1]);
+          fprintf(ThreadServer, "\nFile-Name: %s %d %d\n", NameDat[Process], Records[Process][0], Records[Process][1]);
           fclose(ThreadServer);
         }
         fclose(ThreadConfig);
@@ -242,17 +271,17 @@ int main(int argc, char **argv)
         sleep(5);
 
         Process++;
-        if(Process==Count) break;
+        if(Process == Count) break;
       }
     }
 
     //Go to sleep before checking again for free threads
     sleep(30);
     //Re-negotiate number of cores (might have changed due to newly started other Workers)
-    ChipsOld = Chips;
-    Chips = Negotiate(GUID);
-    if(Chips!=ChipsOld)
-      printf("Changing from %d to %d cores\n", ChipsOld, Chips);
+    runThreadsOld = runThreads;
+    runThreads = Negotiate((int)pid, nThreads);
+    if(runThreads != runThreadsOld)
+      printf("Changing from %d to %d threads\n", runThreadsOld, runThreads);
   }
 
   //When all files have been distributed, wait for running threads to be finished
@@ -260,13 +289,13 @@ int main(int argc, char **argv)
   while(Busy)
   {
     Busy = false;
-    for(Int_t Number=0; Number<CORES; Number++)
+    for(Int_t Number=0; Number < nThreads; Number++)
       Busy = (Busy || Proc[Number]->GetRunning());
     sleep(30);
   }
 
   //Remove up flag file for this Worker process
-  sprintf(Buffer[0], "/tmp/Worker%d", GUID);
+  sprintf(Buffer[0], "/tmp/Worker%d", pid);
   unlink(Buffer[0]);
   //We're done
   printf("Finished\n");
