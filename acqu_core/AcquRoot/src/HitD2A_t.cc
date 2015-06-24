@@ -97,17 +97,17 @@ HitD2A_t::HitD2A_t(char* line, UInt_t nelem, TA2Detector* det , Bool_t ignorePos
 	fTDC = (UShort_t*)(det->GetMulti(iadc))->GetHitPtr(madc);
       // Analyse multiple hits
       else{
-	fTDCM = new UShort_t*[det->GetNMultihit()];
-	fTimeM = new Double_t*[det->GetNMultihit()];
-	for( Int_t m=madc;; m++ ){
-	  padc = (UShort_t*)(det->GetMulti(iadc))->GetHitPtr(m);
-	  if( !padc ) break;
-	  fTDCM[m-madc] = padc;
-	  fTimeM[m-madc] = timeMptr[m-madc] + nelem; 
-	  fNMultihit++;
-	  if( fNMultihit >= (Int_t)det->GetNMultihit() ) break;
-	}
-	fTDC = fTDCM[0];
+        fTDCM = new UShort_t*[det->GetNMultihit()];
+        fTimeM = new Double_t*[det->GetNMultihit()];
+        for( Int_t m=madc;; m++ ){
+          padc = (UShort_t*)(det->GetMulti(iadc))->GetHitPtr(m);
+          if( !padc ) break;
+          fTDCM[m-madc] = padc;
+          fTimeM[m-madc] = timeMptr[m-madc] + nelem; 
+          fNMultihit++;
+          if( fNMultihit >= (Int_t)det->GetNMultihit() ) break;
+        }
+        fTDC = fTDCM[0];
       }
     }
     fItdc = iadc;
