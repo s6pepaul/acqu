@@ -94,7 +94,7 @@ HitD2A_t::HitD2A_t(char* line, UInt_t nelem, TA2Detector* det , Bool_t ignorePos
       fIsMultiTDC = ETrue;
       // 1st hit only?
       if( !det->GetNMultihit() )
-	fTDC = (UShort_t*)(det->GetMulti(iadc))->GetHitPtr(madc);
+        fTDC = det->GetMulti(iadc) != NULL ? (UShort_t*)(det->GetMulti(iadc))->GetHitPtr(madc) : 0;
       // Analyse multiple hits
       else{
         fTDCM = new UShort_t*[det->GetNMultihit()];
