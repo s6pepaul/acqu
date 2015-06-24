@@ -67,7 +67,7 @@ inline bool operator< (const crystal_t& lhs, const crystal_t& rhs){
   return lhs.Energy>rhs.Energy;
 }
 
-inline std::ostream& operator<< (std::ostream& o, const TVector3& c) {
+/*inline std::ostream& operator<< (std::ostream& o, const TVector3& c) {
   return o << "(" << c.X() << "," << c.Y() << "," << c.Z() << ")";
 }
 
@@ -75,7 +75,7 @@ inline std::ostream& operator<< (std::ostream& o, const crystal_t& c) {
   return o << "Crystal Index=" << c.Index
            << " Energy=" << c.Energy
            << " Position " << c.Position;
-}
+}*/
 
 class HitClusterNextGen_t : public HitCluster_t
 {
