@@ -23,7 +23,7 @@ void SaveOpenSpectras() {
 	stringstream elog_cmd;
 	elog_cmd << "echo Run " << gAR->GetRunNumber() << " Online Spectra | ";
 	elog_cmd << "elog -h elog.office.a2.kph -u a2online a2messung ";
-	elog_cmd << "-l 'Main Group Logbook' -a Experiment='EPT test 2014-07' ";
+	elog_cmd << "-l 'Main Logbook 2015' -a Experiment='2015_03 DoublePol Deuteron' ";
 	elog_cmd << "-a Author='PLEASE FILL IN' -a Type=Routine ";
 	elog_cmd << "-a Subject='Online Spectra Run " << gAR->GetRunNumber() << "' ";
 	
@@ -53,6 +53,7 @@ void SaveOpenSpectras() {
 
 
 	printf("\nPosting all PNG images to the Elog\n");
+        cout << elog_cmd.str() << endl;
 	system(elog_cmd.str().c_str());
 	printf("\nPLEASE EDIT THE ELOG ENTRY TO MAKE IT COMPLETE!\n\n");
 }

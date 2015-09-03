@@ -94,12 +94,15 @@ void OnBtnSaveAllClicked() {
 	Long_t runNum = gROOT->ProcessLine("gAR->GetRunNumber()");
 	elog_cmd << "echo Run " << runNum << " Online Spectra | ";
 	elog_cmd << "elog -h elog.office.a2.kph -u a2online a2messung ";
-	elog_cmd << "-l 'Main Group Logbook' -a Experiment='2014-07_EPT_Prod' ";
+	elog_cmd << "-l 'Main Logbook 2015' -a Experiment='2015-08_InMediumModifications' ";
 	elog_cmd << "-a Author='PLEASE FILL IN' -a Type=Routine ";
 	elog_cmd << "-a Subject='Online Spectra Run " << runNum << "' ";
 
 	
 	Int_t i_save = fCbxItems->GetSelected();
+        // update CB spectra before saving if previously selected
+        if (i_save == 0)
+            CallMacro(i_save, "fCanvas");
 	for(Int_t i=0;i<items->GetEntriesFast(); i++) {
 		MacroEntry* item = (MacroEntry*)items->At(i);
 		fCbxItems->Select(i);
@@ -142,7 +145,8 @@ void CheckGUI()
 	items->Add(MacroEntry::Make("CheckMWPC.C","MWPC"));
 	items->Add(MacroEntry::Make("CheckTrigger.C","Trigger"));
 	items->Add(MacroEntry::Make("CheckLiveTimes.C","LiveTimes"));
-	items->Add(MacroEntry::Make("CheckPhysics.C","Physics"));	
+	items->Add(MacroEntry::Make("CheckPhysics.C","Physics"));
+	items->Add(MacroEntry::Make("CheckLinPol.C","LinPol"));
 	
 	// main frame
 	fMainFrame = new TGMainFrame(gClient->GetRoot(), 1240, 890, kMainFrame | kVerticalFrame);
