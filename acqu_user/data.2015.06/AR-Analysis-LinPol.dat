@@ -17,10 +17,11 @@ Reconstruct:
 ## edge can be fit|epics
 ## plane can be file|epics: if file - need "runs:" lines below here.
 ## scaler_ref can be overridden by specific run settings in the "runs: lines"
-#	       norm_energy       edgeMin  edgeMax   tagger ladder   scaler_ref	                          buffers   edge	plane  deadband(MeV)
+#	     runMin  runMax  norm_energy       edgeMin  edgeMax   tagger ladder   scaler_ref	                          buffers   edge	plane  deadband(MeV)
 #for positive target polarization					
-#Misc:	app    900.00            720.0    800.0     TAGG    FPD     data/LadderScalers/LadderScalers_9191.dat  20    fit         file   0.2
-Misc:	app    900.00            735.0    800.0     TAGG    FPD     data/LadderScalers/subtracted_scalers.dat  30   fit         file   0.2
+#Misc:	app    9180  9200   900.00            720.0    800.0     TAGG    FPD     data/LadderScalers/LadderScalers_9191.dat  20    fit         file   0.2
+Misc:	app    9180  9192   900.00            735.0    800.0     TAGG    FPD     data/LadderScalers/subtracted_scalers.dat  30   fit         file   0.2
+Misc:	app    9193  9200   900.00            735.0    800.0     TAGG    FPD     data/LadderScalers/subtracted_scalers.dat  30   fit         file   0.2
 #	
 #
 #
