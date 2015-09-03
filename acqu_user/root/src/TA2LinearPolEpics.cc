@@ -80,8 +80,8 @@ TA2LinearPolEpics::TA2LinearPolEpics( const char* name, TA2System* fAnalysis  )
   fPolPlane = (UShort_t)ENullHit;
   fPlane = -1;
   fLastEdge = -1.0;
-  fEdgeSetting = -1.0;
-  fEdgeRange   = -1.0;
+  fEdgeSettingIndex = -1.0;
+  fEdgeRangeIndex   = -1.0;
   fNRunRanges   = 0;
   fA2LinPolEpicsIndex = 0;
   sprintf(fPlaneString,"Epics"); //Assume plane information from data stream
@@ -173,9 +173,9 @@ TA2LinearPolEpics::TA2LinearPolEpics( const char* name, TA2System* fAnalysis  )
 
   //default values for all in setup file
   //app
-  fNormEnergy      = 700.0;  // defaults for Ee=855, peak ~ 350;
-  fEdgeMin         = 280.0;
-  fEdgeMax         = 420.0;
+  fNormEnergyIndex      = 700.0;  // defaults for Ee=855, peak ~ 350;
+  fEdgeMinIndex         = 280.0;
+  fEdgeMaxIndex         = 420.0;
   sprintf(fTaggerName,"TAGG"); //default to TAGG, FPD
   sprintf(fTaggerName,"FPD");
 
@@ -207,6 +207,9 @@ TA2LinearPolEpics::TA2LinearPolEpics( const char* name, TA2System* fAnalysis  )
   fBeforeEdge      = 150.0;
   fAfterEdge       =  20.0;
   fPolMin          =   0.1;
+
+  appNRunRanges    =     0;
+  fNRunRanges      =     0;
 
   ///Fit Enhancement
   fLOWFIT = 400;
@@ -408,8 +411,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdge->SetStats(kFALSE);
       fHEdge->GetXaxis()->SetTitle("Scaler Reads");
       fHEdge->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdge->SetMinimum(fEdgeMin);
-      fHEdge->SetMaximum(fEdgeMax);
+      fHEdge->SetMinimum(fEdgeMinIndex);
+      fHEdge->SetMaximum(fEdgeMaxIndex);
     }
     sprintf(histName,"%s_CohEdgePerp",fName.Data());
     fHEdgePerp=(TH1F *)f1Dhist->FindObject(histName);
@@ -417,8 +420,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgePerp->SetStats(kFALSE);
       fHEdgePerp->GetXaxis()->SetTitle("Scaler Reads");
       fHEdgePerp->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgePerp->SetMinimum(fEdgeMin);
-      fHEdgePerp->SetMaximum(fEdgeMax);
+      fHEdgePerp->SetMinimum(fEdgeMinIndex);
+      fHEdgePerp->SetMaximum(fEdgeMaxIndex);
       fHEdgePerp->SetLineColor(4);
     }
     sprintf(histName,"%s_CohEdgePara",fName.Data());
@@ -427,8 +430,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgePara->SetStats(kFALSE);
       fHEdgePara->GetXaxis()->SetTitle("Scaler Reads");
       fHEdgePara->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgePara->SetMinimum(fEdgeMin);
-      fHEdgePara->SetMaximum(fEdgeMax);
+      fHEdgePara->SetMinimum(fEdgeMinIndex);
+      fHEdgePara->SetMaximum(fEdgeMaxIndex);
       fHEdgePara->SetLineColor(2);
     }
     sprintf(histName,"%s_CohEdgeDistPerp",fName.Data());
@@ -437,7 +440,7 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeDistPerp->SetStats(kFALSE);
       fHEdgeDistPerp->GetXaxis()->SetTitle("Coherent Edge Position (MeV)");
       fHEdgeDistPerp->GetYaxis()->SetTitle("Scaler Reads");
-      fHEdgeDistPerp->GetXaxis()->Set(fHEdgeDistPerp->GetNbinsX(),fEdgeMin,fEdgeMax);
+      fHEdgeDistPerp->GetXaxis()->Set(fHEdgeDistPerp->GetNbinsX(),fEdgeMinIndex,fEdgeMaxIndex);
       fHEdgeDistPerp->SetLineColor(4);
     }
     sprintf(histName,"%s_CohEdgeDistPara",fName.Data());
@@ -446,7 +449,7 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeDistPara->SetStats(kFALSE);
       fHEdgeDistPara->GetXaxis()->SetTitle("Coherent Edge Position (MeV)");
       fHEdgeDistPara->GetYaxis()->SetTitle("Scaler Reads");
-      fHEdgeDistPara->GetXaxis()->Set(fHEdgeDistPara->GetNbinsX(),fEdgeMin,fEdgeMax);
+      fHEdgeDistPara->GetXaxis()->Set(fHEdgeDistPara->GetNbinsX(),fEdgeMinIndex,fEdgeMaxIndex);
       fHEdgeDistPara->SetLineColor(2);
     }
 
@@ -456,8 +459,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeEpics->SetStats(kFALSE);
       fHEdgeEpics->GetXaxis()->SetTitle("Epics Reads");
       fHEdgeEpics->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgeEpics->SetMinimum(fEdgeMin);
-      fHEdgeEpics->SetMaximum(fEdgeMax);
+      fHEdgeEpics->SetMinimum(fEdgeMinIndex);
+      fHEdgeEpics->SetMaximum(fEdgeMaxIndex);
     }
     sprintf(histName,"%s_CohEdgePerpEpics",fName.Data());
     fHEdgePerpEpics=(TH1F *)f1Dhist->FindObject(histName);
@@ -465,8 +468,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgePerpEpics->SetStats(kFALSE);
       fHEdgePerpEpics->GetXaxis()->SetTitle("Epics Reads");
       fHEdgePerpEpics->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgePerpEpics->SetMinimum(fEdgeMin);
-      fHEdgePerpEpics->SetMaximum(fEdgeMax);
+      fHEdgePerpEpics->SetMinimum(fEdgeMinIndex);
+      fHEdgePerpEpics->SetMaximum(fEdgeMaxIndex);
       fHEdgePerpEpics->SetLineColor(4);
     }
     sprintf(histName,"%s_CohEdgeParaEpics",fName.Data());
@@ -475,8 +478,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeParaEpics->SetStats(kFALSE);
       fHEdgeParaEpics->GetXaxis()->SetTitle("Epics Reads");
       fHEdgeParaEpics->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgeParaEpics->SetMinimum(fEdgeMin);
-      fHEdgeParaEpics->SetMaximum(fEdgeMax);
+      fHEdgeParaEpics->SetMinimum(fEdgeMinIndex);
+      fHEdgeParaEpics->SetMaximum(fEdgeMaxIndex);
       fHEdgeParaEpics->SetLineColor(2);
     }
     sprintf(histName,"%s_CohEdgeDistPerpEpics",fName.Data());
@@ -485,7 +488,7 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeDistPerpEpics->SetStats(kFALSE);
       fHEdgeDistPerpEpics->GetXaxis()->SetTitle("Coherent Edge Position (MeV)");
       fHEdgeDistPerpEpics->GetYaxis()->SetTitle("Epics Reads");
-      fHEdgeDistPerpEpics->GetXaxis()->Set(fHEdgeDistPerpEpics->GetNbinsX(),fEdgeMin,fEdgeMax);
+      fHEdgeDistPerpEpics->GetXaxis()->Set(fHEdgeDistPerpEpics->GetNbinsX(),fEdgeMinIndex,fEdgeMaxIndex);
       fHEdgeDistPerpEpics->SetLineColor(4);
     }
     sprintf(histName,"%s_CohEdgeDistParaEpics",fName.Data());
@@ -494,7 +497,7 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeDistParaEpics->SetStats(kFALSE);
       fHEdgeDistParaEpics->GetXaxis()->SetTitle("Coherent Edge Position (MeV)");
       fHEdgeDistParaEpics->GetYaxis()->SetTitle("Epics Reads");
-      fHEdgeDistParaEpics->GetXaxis()->Set(fHEdgeDistParaEpics->GetNbinsX(),fEdgeMin,fEdgeMax);
+      fHEdgeDistParaEpics->GetXaxis()->Set(fHEdgeDistParaEpics->GetNbinsX(),fEdgeMinIndex,fEdgeMaxIndex);
       fHEdgeDistParaEpics->SetLineColor(2);
     }
 
@@ -689,8 +692,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeGated->SetStats(kFALSE);
       fHEdgeGated->GetXaxis()->SetTitle("Scaler Reads");
       fHEdgeGated->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgeGated->SetMinimum(fEdgeMin);
-      fHEdgeGated->SetMaximum(fEdgeMax);
+      fHEdgeGated->SetMinimum(fEdgeMinIndex);
+      fHEdgeGated->SetMaximum(fEdgeMaxIndex);
     }
     sprintf(histName,"%s_CohEdgeGatedPerp",fName.Data());
     fHEdgeGatedPerp=(TH1F *)f1Dhist->FindObject(histName);
@@ -698,8 +701,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeGatedPerp->SetStats(kFALSE);
       fHEdgeGatedPerp->GetXaxis()->SetTitle("Scaler Reads");
       fHEdgeGatedPerp->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgeGatedPerp->SetMinimum(fEdgeMin);
-      fHEdgeGatedPerp->SetMaximum(fEdgeMax);
+      fHEdgeGatedPerp->SetMinimum(fEdgeMinIndex);
+      fHEdgeGatedPerp->SetMaximum(fEdgeMaxIndex);
       fHEdgeGatedPerp->SetLineColor(4);
       fHEdgeGatedPerp->SetLineStyle(2);
     }
@@ -709,8 +712,8 @@ void TA2LinearPolEpics::PostInitialise( )
       fHEdgeGatedPara->SetStats(kFALSE);
       fHEdgeGatedPara->GetXaxis()->SetTitle("Scaler Reads");
       fHEdgeGatedPara->GetYaxis()->SetTitle("Edge Position (MeV)");
-      fHEdgeGatedPara->SetMinimum(fEdgeMin);
-      fHEdgeGatedPara->SetMaximum(fEdgeMax);
+      fHEdgeGatedPara->SetMinimum(fEdgeMinIndex);
+      fHEdgeGatedPara->SetMaximum(fEdgeMaxIndex);
       fHEdgeGatedPara->SetLineColor(2);
       fHEdgeGatedPara->SetLineStyle(2);
     }
@@ -751,6 +754,7 @@ void TA2LinearPolEpics::Reconstruct( ){
       fPolRangeIndex[ETablePara]=-1;
       fPolRangeIndex[ETablePerp]=-1;
       fRunRangeIndex=-1;
+      appRunRangeIndex=-1;
       
       sscanf(strrchr(fCurrentRunFileName,'_'),"_%d.dat",&fRunNo);  //get the run no from filename    
       if(fHavePolTable){
@@ -777,9 +781,27 @@ void TA2LinearPolEpics::Reconstruct( ){
 	exit(1);
 	}
       }
+
+      for(int index=0;index<appNRunRanges;index++){ //find app table for this run
+	if((fRunNo>=appRunRangeMin[index])&&(fRunNo<=appRunRangeMax[index])){
+	  appRunRangeIndex=index;
+	  fNormEnergyIndex=fNormEnergy[index];
+	  fEdgeMinIndex=fEdgeMin[index];
+	  fEdgeMaxIndex=fEdgeMax[index];
+	  break;
+	}
+	if(appRunRangeIndex==-1){
+	  fprintf(stderr,"Fatal Error: No Misc app info for run %d",fRunNo);
+	  // not a good way to exit (it will segfault)
+	  exit(1);
+	}
+      }
+      
       for(int index=0;index<fNRunRanges;index++){ //find the run table run range for this run
 	if((fRunNo>=fRunRangeMin[index])&&(fRunNo<=fRunRangeMax[index])){
 	  fRunRangeIndex=index;
+	  fEdgeSettingIndex=fEdgeSetting[index];
+	  fEdgeRangeIndex=fEdgeRange[index];
 	  break;
 	}
       }
@@ -1052,7 +1074,7 @@ void TA2LinearPolEpics::Reconstruct( ){
 	    
 	      binx=0;
 	      ymax=0;
-	      for(int b=fHEnh->FindBin(fEdgeMin);b<fHEnh->FindBin(fEdgeMax);b++){
+	      for(int b=fHEnh->FindBin(fEdgeMinIndex);b<fHEnh->FindBin(fEdgeMaxIndex);b++){
 		if(fHEnh->GetBinContent(b)>ymax){
 		  ymax=fHEnh->GetBinContent(b);
 		  binx=b;
@@ -1131,7 +1153,7 @@ void TA2LinearPolEpics::Reconstruct( ){
 	    {
 	      binx=0;
 	      ymax=0;
-	      for(int b=fHGatedCurrEnh->FindBin(fEdgeMin);b<fHGatedCurrEnh->FindBin(fEdgeMax);b++){
+	      for(int b=fHGatedCurrEnh->FindBin(fEdgeMinIndex);b<fHGatedCurrEnh->FindBin(fEdgeMaxIndex);b++){
 		if(fHGatedCurrEnh->GetBinContent(b)>ymax){
 		  ymax=fHGatedCurrEnh->GetBinContent(b);
 		  binx=b;
@@ -1235,8 +1257,8 @@ void TA2LinearPolEpics::ParseMisc(char *line){	// read parameters in the setup f
   type=Map2Key(miscType,kValidMiscParams);
   switch(type){
   case ELpMiscApp:
-    if(sscanf(line, "%*s%lf%lf%lf%s%s%s%d%s%s%lf",&fNormEnergy,&fEdgeMin,&fEdgeMax,fTaggerName,fLadderName,
-	      fRunRefFiles[0],&fNScalerBuffers,fEdgeString,fPlaneString,&fDeadband)!=10){
+    if(sscanf(line, "%*s%d%d%lf%lf%lf%s%s%s%d%s%s%lf",&appRunRangeMin[appNRunRanges],&appRunRangeMax[appNRunRanges],&fNormEnergy[appNRunRanges],&fEdgeMin[appNRunRanges],&fEdgeMax[appNRunRanges],fTaggerName,
+	      fLadderName,fRunRefFiles[appNRunRanges],&fNScalerBuffers,fEdgeString,fPlaneString,&fDeadband)!=12){
       PrintError( line, "Linear Pol app  parameters" );
     }
     fHaveApp=kTRUE;
@@ -1258,11 +1280,12 @@ void TA2LinearPolEpics::ParseMisc(char *line){	// read parameters in the setup f
       fIsEpics=kFALSE;
     }
     fHaveCbrem = kTRUE;
+    appNRunRanges++;
     break;
     
   case ELpMiscRunRanges:
     if(sscanf(line, "%*s%d%d%s%s%lf%lf",&fRunRangeMin[fNRunRanges],&fRunRangeMax[fNRunRanges],
-	      fRunRefFiles[fNRunRanges],planeString,&fEdgeSetting, &fEdgeRange)!=6){
+	      fRunRefFiles[fNRunRanges],planeString,&fEdgeSetting[fNRunRanges], &fEdgeRange[fNRunRanges])!=6){
       PrintError( line, "Linear Pol Run Range parameters" );
     }
     if(strcmp(planeString,"para")==0){
@@ -1412,7 +1435,7 @@ int TA2LinearPolEpics::LoadAmoRef(Char_t *refFileName){
     // work out the normalisation channel based on the norm energy
     
     for(int n=0;n<fTaggerChannels;n++){
-      if(fEnergyCalib[n]>=fNormEnergy){
+      if(fEnergyCalib[n]>=fNormEnergyIndex){
 	fNormChannel=n;
 	break;
       }
@@ -1456,7 +1479,7 @@ Double_t *TA2LinearPolEpics::FillPolArray(){
   if(fIsNewFile) return NULL;	//no meaningful pol info until 1st scaler read,
 
   //if no valid plane or edge
-  if(((fPlane!=ETablePara)&&(fPlane!=ETablePerp))|| ((fEdge<(fEdgeSetting-fEdgeRange))||(fEdge>(fEdgeSetting+fEdgeRange)))){
+  if(((fPlane!=ETablePara)&&(fPlane!=ETablePerp))|| ((fEdge<(fEdgeSettingIndex-fEdgeRangeIndex))||(fEdge>(fEdgeSettingIndex+fEdgeRangeIndex)))){
     while(fLadderHits[n]!=(Int_t)ENullHit){
       fPolArray[n]=-1.0;
       fPolArrayM[n++]=-1.0;
