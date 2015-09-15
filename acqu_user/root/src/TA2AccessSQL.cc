@@ -67,12 +67,14 @@ void TA2AccessSQL::SetConfig(Char_t* line, Int_t key)
     }
       
     Char_t tmp[5][256];
-    
+    Int_t useNumber = 0;
+
     // read CaLib parameters
-    if (sscanf(line, "%s%s%s%s%s", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]) == 5) 
+    if (sscanf(line, "%s%s%s%s%s%d", tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], &useNumber) >= 5)
     {
       // create the CaLib reader
-      fCaLibReader = new CaLibReader_t(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], fRunNumber);
+      if (useNumber != 0) fCaLibReader = new CaLibReader_t(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], useNumber);
+      else fCaLibReader = new CaLibReader_t(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], fRunNumber);
       
       // check database connection
       if (fCaLibReader->IsConnected())
