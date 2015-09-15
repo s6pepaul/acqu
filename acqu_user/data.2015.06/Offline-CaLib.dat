@@ -24,6 +24,9 @@
 ## RawEvent_Scalers: 4 * (number of scalers + 1) is sufficient
 ## Mk1_Header: 4 * (number of ADCs + 1) is sufficient
 ## NB with TAPS the number of ADCs = 29001
+##-----------------------------------------------------------------------
+# Use DirectIO mode (experimental)
+UseDirectIO:
 ##
 ## Batch mode operation...redirect output directory for log files etc.
 BatchDir: logfiles/
