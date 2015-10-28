@@ -2,6 +2,7 @@
 
 /*************************************************************************
  * Author: Dominik Werthmueller, Irakli Keshelashvili
+   Modified: Farah Afzal, Karsten Spieker in October 2015
  *************************************************************************/
 
 //////////////////////////////////////////////////////////////////////////
@@ -119,7 +120,17 @@ void TCCalibTime::Init()
     TCUtils::FormatHistogram(fOverviewHisto, tmp);
     fOverviewHisto->Draw("P");
 }
+    Double_t lower_Tlimit;		//rejection range while fitting background
+    Double_t higher_Tlimit;
+double PolyDeg3(Double_t *x, Double_t *par){
+	Double_t xx = x[0];
 
+	if ((xx > lower_Tlimit) && (xx < higher_Tlimit)) {
+         TF1::RejectPoint();
+   	}
+
+  	return  par[0] + par[1]*xx + par[2]*TMath::Power(xx,2) + par[3]*TMath::Power(xx,3);
+}
 //______________________________________________________________________________
 void TCCalibTime::Fit(Int_t elem)
 {
@@ -143,7 +154,7 @@ void TCCalibTime::Fit(Int_t elem)
     sprintf(tmp, "%s.Histo.Fit", GetName());
     TCUtils::FormatHistogram(fFitHisto, tmp);
     fFitHisto->Draw("hist");
- 
+
     // check for sufficient statistics
     if (fFitHisto->GetEntries())
     {
@@ -151,19 +162,55 @@ void TCCalibTime::Fit(Int_t elem)
         if (fFitFunc) delete fFitFunc;
         sprintf(tmp, "fTime_%i", elem);
 
-	// the fit function
-	fFitFunc = new TF1("fFitFunc", "pol1(0)+gaus(2)");
-	fFitFunc->SetLineColor(2);
+  	if (this->InheritsFrom("TCCalibTAPSTime")){
+		// the fit function
+		fFitFunc = new TF1("fFitFunc", "pol3(0)+gaus(4)");//, -3,3,7
+		fFitFunc->SetLineColor(2);
 	
-	// get important parameter positions
-	Double_t fMean = fFitHisto->GetXaxis()->GetBinCenter(fFitHisto->GetMaximumBin());
-	Double_t max = fFitHisto->GetBinContent(fFitHisto->GetMaximumBin());
+		// get important parameter positions
+		Double_t fMean = fFitHisto->GetXaxis()->GetBinCenter(fFitHisto->GetMaximumBin());
+		Double_t max = fFitHisto->GetBinContent(fFitHisto->GetMaximumBin());
 
-	// configure fitting function
-	fFitFunc->SetParameters(1, 0.1, max, fMean, 8);
-	fFitFunc->SetParLimits(2, 0.1, max*10);
-	fFitFunc->SetParLimits(3, fMean - 2, fMean + 2);
-	fFitFunc->SetParLimits(4, 0, 20);                  
+		// configure fitting function
+	 	fFitPeak    = new TF1("fFitPeak","gaus(0)");//,-2, 2,3
+		fFitBackGround    = new TF1("fFitBackGround","pol3(0)");//, -2, 2,4 
+		fFitBackGroundWithoutPeak = new TF1("fFitBackGroundWithoutPeak",PolyDeg3, -4,4,4);//, -2, 2,4 
+
+		lower_Tlimit=-0.9;
+		higher_Tlimit=0.9;
+		for (Int_t i=0; i<4; ++i) fFitBackGroundWithoutPeak->SetParameter(i,1.); 
+		fFitHisto->Fit(fFitBackGroundWithoutPeak, "RBQ0");
+		
+		for (Int_t i=0; i<4; ++i) fFitFunc->FixParameter(i,fFitBackGroundWithoutPeak->GetParameter(i));
+
+		fFitPeak->SetRange(-2.,2.);
+		fFitBackGround->SetRange(-2.,2.);
+		fFitFunc->SetRange(-4.,4.);
+		fFitFunc->SetParLimits(4,10., 20000000.); 
+	  	fFitFunc->SetParLimits(5,-1., 1.);
+  		fFitFunc->SetParLimits(6, 0.4,2.); 
+	}
+	if(!(this->InheritsFrom("TCCalibTAPSTime"))){
+		// the fit function
+		fFitFunc = new TF1("fFitFunc", "pol1(0)+gaus(2)");
+		fFitFunc->SetLineColor(2);
+
+		// get important parameter positions
+		Double_t fMean = fFitHisto->GetXaxis()->GetBinCenter(fFitHisto->GetMaximumBin());
+		Double_t max = fFitHisto->GetBinContent(fFitHisto->GetMaximumBin());
+
+		// configure fitting function
+	 	fFitPeak    = new TF1("fFitPeak","gaus(0)");//,-2, 2,3
+		fFitBackGround    = new TF1("fFitBackGround","pol1(0)");//, -2, 2,4 
+
+		fFitPeak->SetRange(-1.,1.);
+		fFitBackGround->SetRange(-4.,4.);
+		fFitFunc->SetRange(-4.,4.);
+		fFitFunc->SetParameters(1, 0.1, max, fMean, 8);
+		fFitFunc->SetParLimits(2, 0.1, max*10.);
+		fFitFunc->SetParLimits(3, fMean - 2., fMean + 2.);
+		fFitFunc->SetParLimits(4, 0., 20.);   
+	}
     
         // special configuration for certain classes
          if (!this->InheritsFrom("TCCalibTaggerTime") && 
@@ -177,7 +224,7 @@ void TCCalibTime::Fit(Int_t elem)
         }
         if (this->InheritsFrom("TCCalibTAPSTime"))
         {
-	    fFitFunc->SetParLimits(4, 0.001, 10);                  
+	//    fFitFunc->SetParLimits(4, 0.001, 10);                  
             range = 10;
             factor = 5;
         }
@@ -196,34 +243,53 @@ void TCCalibTime::Fit(Int_t elem)
 	    fFitFunc->SetParLimits(4, 0.01, 2);                  
         }
 
-        // first iteration
-	fFitFunc->SetRange(fMean - range, fMean + range);
-	fFitHisto->Fit(fFitFunc, "RBQ0");
-	fMean = fFitFunc->GetParameter(3);
+	if(this->InheritsFrom("TCCalibTAPSTime")){
+        	// first iteration
+		fFitHisto->Fit(fFitFunc, "RBQ0");
+		fMean = fFitFunc->GetParameter(5);
 
-        // second iteration
-        Double_t sigma = fFitFunc->GetParameter(4);
-        fFitFunc->SetRange(fMean -factor*sigma, fMean +factor*sigma);
-        for (Int_t i = 0; i < 10; i++)
-            if(!fFitHisto->Fit(fFitFunc, "RBQ0")) break;
+		for (Int_t i=0; i<4; ++i) fFitBackGround->FixParameter(i,fFitFunc->GetParameter(i));
+		for (Int_t i=4; i<=6; ++i) fFitPeak->FixParameter(i-4,fFitFunc->GetParameter(i));
+	}
+	if(!(this->InheritsFrom("TCCalibTAPSTime"))){
+		// first iteration
+		fFitFunc->SetRange(fMean - range, fMean + range);
+		fFitHisto->Fit(fFitFunc, "RBQ0");
+		fMean = fFitFunc->GetParameter(3);
 
-        // final results
-        fMean = fFitFunc->GetParameter(3); 
+        	// second iteration
+        	Double_t sigma = fFitFunc->GetParameter(4);
+        	fFitFunc->SetRange(fMean -factor*sigma, fMean +factor*sigma);
+       	 	for (Int_t i = 0; i < 10; i++)
+            		if(!fFitHisto->Fit(fFitFunc, "RBQ0")) break;
+
+        	// final results
+        	fMean = fFitFunc->GetParameter(3); 
+		for (Int_t i=0; i<2; ++i) fFitBackGround->FixParameter(i,fFitFunc->GetParameter(i));
+		for (Int_t i=2; i<=4; ++i) fFitPeak->FixParameter(i-2,fFitFunc->GetParameter(i));
+	}
 
         // draw mean indicator line
         fLine->SetupY(0,fFitHisto->GetMaximum() + 20);
         fLine->SetX1(fMean);
-   
+
         // draw fitting function
-        if (fFitFunc) fFitFunc->Draw("same");
+        if (fFitFunc){
+		fFitFunc->Draw("same");
+		fFitPeak->Draw("same");
+            	fFitPeak->SetLineColor(kGreen);
+		fFitBackGround->Draw("same");
+            	fFitBackGround->SetLineColor(kBlue);
+	}
     
         // draw indicator line
         fLine->Draw();
+
     }
 
     // update canvas
     fCanvasFit->Update();
-    
+
     // update overview
     if (elem % 20 == 0)
     {

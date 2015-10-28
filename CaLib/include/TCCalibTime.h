@@ -32,10 +32,12 @@ protected:
     Double_t* fTimeGain;                // TDC gain array
     Double_t fMean;                     // mean time position
     TIndicatorLine* fLine;                       // indicator line
-    
+   
+
     virtual void Init();
     virtual void Fit(Int_t elem);
     virtual void Calculate(Int_t elem);
+
 
 public:
     TCCalibTime() : TCCalib(), fTimeGain(0), fMean(0), fLine(0) { }
@@ -45,6 +47,7 @@ public:
 
     ClassDef(TCCalibTime, 0) // Base time calibration class
 };
+
 
 
 class TCCalibTaggerTime : public TCCalibTime
