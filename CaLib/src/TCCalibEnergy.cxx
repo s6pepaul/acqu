@@ -177,17 +177,17 @@ void TCCalibEnergy::Fit(Int_t elem)
     
         // draw indicator line
         fLine->Draw();
-    }
 
-    double xmin,xmax;
-    fFitFunc->GetRange(xmin,xmax);
-    double maximum = fFitFunc->GetMaximumX();
-    fFitOk=false;
-    if(maximum < xmax && maximum > xmin) {
-        puts("Fit OK!\n");
-        fFitOk=true;
-    } else {
-        puts("No Maximum found in fit!");
+	double xmin,xmax;
+	fFitFunc->GetRange(xmin,xmax);
+	double maximum = fFitFunc->GetMaximumX();
+	fFitOk=false;
+	if(maximum < xmax && maximum > xmin) {
+		puts("Fit OK!\n");
+		fFitOk=true;
+	} else {
+		puts("No Maximum found in fit!");
+	}
     }
 
     if(fDetectorView) {
