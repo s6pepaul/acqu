@@ -21,6 +21,22 @@
 
 #include "TCReadConfig.h"
 
+// define A2 detectors
+enum EA2Detector {
+    kNoDetector,            // no detector
+    kCBDetector,            // Crystal Ball
+    kTAPSDetector           // TAPS
+};
+typedef EA2Detector A2Detector_t;
+
+// define TAPS types
+enum EA2TAPSType {
+    kTAPS_2007,             // TAPS 2007 with 384 BaF2
+    kTAPS_2008,             // TAPS 2008 with 378 BaF2 + 24 PbWO4
+    kTAPS_2009              // TAPS 2009 with 366 BaF2 + 72 PbWO4
+};
+typedef EA2TAPSType A2TAPSType_t;
+
 
 namespace TCUtils
 {
@@ -33,6 +49,7 @@ namespace TCUtils
     Double_t GetHistogramMinimumPosition(TH1* h);
     void FormatHistogram(TH1* h, const Char_t* ident);
     Bool_t IsCBHole(Int_t elem);
+    Int_t GetTAPSRing(Int_t id, A2TAPSType_t type);
     Int_t GetVetoInFrontOfElement(Int_t id, Int_t maxTAPS);
     Double_t GetDiffPercent(Double_t oldValue, Double_t newValue);
 }

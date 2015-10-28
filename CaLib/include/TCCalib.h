@@ -55,6 +55,7 @@ protected:
     TF1* fFitFunc;              // fitting function
     TF1* fFitPeak;
     TF1* fFitBackGround;
+    TF1* fFitBackGroundWithoutPeak;
 
 
     TH1* fOverviewHisto;        // overview result histogram

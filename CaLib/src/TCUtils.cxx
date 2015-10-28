@@ -292,6 +292,39 @@ Int_t TCUtils::GetVetoInFrontOfElement(Int_t id, Int_t maxTAPS)
     }
 }
 
+Int_t TCUtils::GetTAPSRing(Int_t id, A2TAPSType_t type)
+{
+    // Return the number of the ring (1 to 11) the TAPS element
+    // 'id' belongs to in the TAPS type 'type'.
+    
+    // element layout (first and last elements of a ring)
+    Int_t ringRange[11][2] = {{0, 0}, {1, 2}, {3, 5}, {6, 9}, {10, 14}, {15, 20},
+                              {21, 27}, {28, 35}, {36, 44}, {45, 54}, {55, 63}};
+             
+    // get corresponding TAPS 2007 element number
+    Int_t elem = GetVetoInFrontOfElement(id, 438);
+    
+    // map element to first block
+    Int_t mid = elem % 64;
+
+    if      (mid >= ringRange[0][0]  && mid <= ringRange[0][1])  return 1;
+    else if (mid >= ringRange[1][0]  && mid <= ringRange[1][1])  return 2;
+    else if (mid >= ringRange[2][0]  && mid <= ringRange[2][1])  return 3;
+    else if (mid >= ringRange[3][0]  && mid <= ringRange[3][1])  return 4;
+    else if (mid >= ringRange[4][0]  && mid <= ringRange[4][1])  return 5;
+    else if (mid >= ringRange[5][0]  && mid <= ringRange[5][1])  return 6;
+    else if (mid >= ringRange[6][0]  && mid <= ringRange[6][1])  return 7;
+    else if (mid >= ringRange[7][0]  && mid <= ringRange[7][1])  return 8;
+    else if (mid >= ringRange[8][0]  && mid <= ringRange[8][1])  return 9;
+    else if (mid >= ringRange[9][0]  && mid <= ringRange[9][1])  return 10;
+    else if (mid >= ringRange[10][0] && mid <= ringRange[10][1]) return 11;
+    else 
+    {
+        ::Error("GetTAPSRing", "TAPS ring could not be identified!");
+        return 99;
+    }
+}
+
 //______________________________________________________________________________
 Double_t TCUtils::GetDiffPercent(Double_t oldValue, Double_t newValue)
 {

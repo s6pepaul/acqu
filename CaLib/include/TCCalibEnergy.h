@@ -33,7 +33,9 @@ class TCCalibEnergy : public TCCalib
 
 protected:
     Double_t fPi0Pos;                   // pi0 position
+    A2TAPSType_t fTAPSType;       // TAPS type
     TIndicatorLine* fLine;              // indicator line
+
     
     virtual void Init();
     virtual void Fit(Int_t elem);
@@ -41,13 +43,14 @@ protected:
 
 protected:
         TH2Crystals* fDetectorView;
-        virtual void initFitFunction() =0;
+        virtual void initFitFunction(Int_t elem) =0;
         bool fFitOk;
         enum {
             vFitOK =1,
             vCurrPos =2,
             vFitFailed=3
         };
+
 
 public:
     TCCalibEnergy() : TCCalib(), fPi0Pos(0), fLine(0) { }
@@ -62,7 +65,7 @@ public:
 class TCCalibCBEnergy : public TCCalibEnergy
 {
 protected:
-    virtual void initFitFunction();
+    virtual void initFitFunction(Int_t elem);
     
 public:
     TCCalibCBEnergy()
@@ -80,7 +83,7 @@ public:
 class TCCalibTAPSEnergyLG : public TCCalibEnergy
 {
 protected:
-    virtual void initFitFunction();
+    virtual void initFitFunction(Int_t elem);
     
 public:
     TCCalibTAPSEnergyLG()
