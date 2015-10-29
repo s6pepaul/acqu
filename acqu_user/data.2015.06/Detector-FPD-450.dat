@@ -7,9 +7,9 @@ Size: 	352 	0 	1 	1
 Multi-hit: 8
 #
 ##	Scalers	Calib	Overlap	Micro	#trig	Toff	Tres
-Misc:	1	1	1	0	0.0	-50	0.0
+Misc:	1	1	1	0	0	0	0.0
 ##
-Window: 16. 24. -20. -12. 
+Window: -10. 10. -50. -30. 
 ##
 ## G 0 - 31  Section AB
 ##

@@ -35,9 +35,9 @@ CaLib-TAPS-Time-Cut-MaxRing: 4
 ### STEP ONE: "PID Phi Angle Calibration" and "Veto Correlation"
 
 # PID Phi calibration
-CaLib-PID-Phi: 1
+#CaLib-PID-Phi: 1
 # veto-crystal correlation
-CaLib-Veto-Corr: 1
+#CaLib-Veto-Corr: 1
 
 ### STEP TWO 
 
@@ -50,15 +50,15 @@ CaLib-Veto-Corr: 1
 # Have dummy TimeWalk: 0 0.000000000 0.0000000000 0.00000000 0.0000000 entries in your Detector-NaI.dat file
 
 # CB energy calibration
-CaLib-CB-Energy: 1
+#CaLib-CB-Energy: 1
 # CB time calibration
-CaLib-CB-Time: 1
+#CaLib-CB-Time: 1
 # TAPS time calibration
-CaLib-TAPS-Time: 1
+#CaLib-TAPS-Time: 1
 # PID time calibration
-CaLib-PID-Time: 1
+#CaLib-PID-Time: 1
 # Veto time
-CaLib-Veto-Time: 1
+#CaLib-Veto-Time: 1
 
 ### STEP FOUR
 
@@ -66,14 +66,14 @@ CaLib-Veto-Time: 1
 # Ensure that you have enough statistics for the Quadratic energy correction
 
 # target position calibration
-CaLib-Target-Position: 1
+#CaLib-Target-Position: 1
 
 # CB quadratic energy correction
 #              on/off  pi0_min  pi0_max  eta_min  eta_max
 #CaLib-CB-Quad: 1       100      150      480      620
 
 # tagger time calibration
-CaLib-Tagger-Time: 1
+#CaLib-Tagger-Time: 1
 
 #### STEP FIVE
 
@@ -105,6 +105,7 @@ CaLib-Tagger-Time: 1
 
 # PID energy calibration
 #CaLib-PID-Energy: 1
+CaLib-PID-Energy: 1       120      150      -20           0          -70     -40        20       50      -100    100
 
 
 

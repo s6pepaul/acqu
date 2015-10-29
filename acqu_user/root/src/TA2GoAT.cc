@@ -909,9 +909,9 @@ void    TA2GoAT::Reconstruct()
         for(Int_t i=0; i<nBaF2Hits; i++)
 		{
             BaF2Hits[i] = fBaF2PWO->GetHits(i);
-            BaF2Cluster[i] = clindex[BaF2Hits[i]];
-            if(fBaF2PWO->IsEnergy()) BaF2Energy[i] = fBaF2PWO->GetEnergy(BaF2Hits[i]);
-            if(fBaF2PWO->IsTime()) BaF2Time[i] = fBaF2PWO->GetTime(BaF2Hits[i]);
+            BaF2Cluster[i] = clindex[fBaF2PWO->GetHits(i)];
+            if(fBaF2PWO->IsEnergy()) BaF2Energy[i] = fBaF2PWO->GetLGEnergy(fBaF2PWO->GetHits(i));
+            if(fBaF2PWO->IsTime()) BaF2Time[i] = fBaF2PWO->GetTime(fBaF2PWO->GetHits(i));
         }
 	}
 
@@ -1024,16 +1024,16 @@ void    TA2GoAT::Reconstruct()
     NaIEnergy[nNaIHits] 	  = EBufferEnd;
     NaITime[nNaIHits]         = EBufferEnd;
     PIDHits[nPIDHits] 	      = EBufferEnd;
-    PIDEnergy[nNaIHits] 	  = EBufferEnd;
-    PIDTime[nNaIHits]         = EBufferEnd;
+    PIDEnergy[nPIDHits] 	  = EBufferEnd;
+    PIDTime[nPIDHits]         = EBufferEnd;
     MWPCHits[nMWPCHits] 	  = EBufferEnd;
     BaF2Hits[nBaF2Hits] 	  = EBufferEnd;
     BaF2Cluster[nBaF2Hits] 	  = EBufferEnd;
-    BaF2Energy[nNaIHits] 	  = EBufferEnd;
-    BaF2Time[nNaIHits]        = EBufferEnd;
+    BaF2Energy[nBaF2Hits] 	  = EBufferEnd;
+    BaF2Time[nBaF2Hits]       = EBufferEnd;
     VetoHits[nVetoHits] 	  = EBufferEnd;
-    VetoEnergy[nNaIHits] 	  = EBufferEnd;
-    VetoTime[nNaIHits]        = EBufferEnd;
+    VetoEnergy[nVetoHits] 	  = EBufferEnd;
+    VetoTime[nVetoHits]       = EBufferEnd;
 
     errorModuleID[nErrors] 	  = EBufferEnd;
     errorModuleIndex[nErrors] = EBufferEnd;
