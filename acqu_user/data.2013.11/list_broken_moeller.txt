@@ -1,0 +1,15 @@
+CBTaggTAPS_1068.root
+CBTaggTAPS_1043.root
+CBTaggTAPS_1116.root
+CBTaggTAPS_1179.root
+CBTaggTAPS_1287.root
+CBTaggTAPS_344.root
+CBTaggTAPS_423.root
+CBTaggTAPS_483.root
+CBTaggTAPS_485.root
+CBTaggTAPS_646.root
+CBTaggTAPS_745.root
+CBTaggTAPS_796.root
+CBTaggTAPS_905.root
+CBTaggTAPS_941.root
+CBTaggTAPS_977.root

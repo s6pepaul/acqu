@@ -1,0 +1,17 @@
+
+*** These modified files were found in JOE when it aborted on Thu Oct 29 11:11:38 2015
+*** JOE was aborted by UNIX signal 1
+
+*** File '(Unnamed)'
+.git/MERGE_MSG
+
+*** File '.git/MERGE_MSG'
+update
+
+Merge branch 'master' of https://github.com/A2-Collaboration-dev/acqu
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+# 
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.

@@ -1,0 +1,4 @@
+Error in <ReadCaLibData>: Could not open data definition file '/hadron/pauli/acqu/CaLib/config/data/data.def'
+Error in <TCMySQLManager>: Could not read the CaLib data definitions!
+Error in <IsConnected>: Cannot access database!
+Error in <GetManager>: No connection to the database!
