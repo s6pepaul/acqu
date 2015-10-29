@@ -5,8 +5,8 @@
 #
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #Detector systems in TAPS apparatus
-Detector: VETO		   TA2TAPS_Veto		/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-Veto.dat
-Detector: BaF2PWO          TA2TAPS_BaF2		/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-BaF2.dat
+Detector: VETO		   TA2TAPS_Veto		/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-Veto.dat
+Detector: BaF2PWO          TA2TAPS_BaF2		/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-BaF2.dat
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #Standard AcquRoot options

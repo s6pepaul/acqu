@@ -20,7 +20,7 @@ Size:   438     1       1       1
 ## Use bit pattern, uncomment if desired
 ########################################################################
 ##
-BitPattern: /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-BaF2-Pat.dat
+BitPattern: /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS-BaF2-Pat.dat
 #
 ########################################################################
 ## Global energy scale parameter, uncomment if desired

@@ -46,16 +46,16 @@ MultiADC: 1 10000 10100
 #
 ## Stuff to monitor time dependence of counting rates and the hit pattern
 ## coming from the trigger box....the parameter is the setup file name
-RateMonitor: /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TriggerRate.dat
-BitPattern:  /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TriggerPat.dat
+RateMonitor: /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TriggerRate.dat
+BitPattern:  /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TriggerPat.dat
 ##
 ## Apparatus setup....
 ## Raw analysis may be performed without Apparati
 ##                  Name      	Class                   Setup file	
-Apparatus:	    TAGG     	TA2Tagger		/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-Tagger.dat
-#Apparatus:          LinPol     TA2LinearPolEpics       /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/ AR-Analysis-LinPol.dat
-Apparatus:	    CB	  	TA2CentralApparatus   	/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-CB.dat
-Apparatus:          TAPS      	TA2Taps                 /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS.dat
+Apparatus:	    TAGG     	TA2Tagger		/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-Tagger.dat
+#Apparatus:          LinPol     TA2LinearPolEpics       /hadron/pauli/acqu/acqu_user/data.2015.09/ AR-Analysis-LinPol.dat
+Apparatus:	    CB	  	TA2CentralApparatus   	/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-CB.dat
+Apparatus:          TAPS      	TA2Taps                 /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-TAPS.dat
 ##
 ## Turn on apparatus-level reconstruction
 Reconstruct-Analysis:
@@ -63,8 +63,8 @@ Reconstruct-Analysis:
 ## Specify physics analysis
 ##                  	Name      Class                    	Config File
 #
-#Physics-Analysis:	CaLib	TA2MyCaLib	       	/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-MyCaLib.dat
-Physics-Analysis:	GoAT	TA2GoAT			/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-GoAT.dat
+#Physics-Analysis:	CaLib	TA2MyCaLib	       	/hadron/pauli/acqu/acqu_user/data.2015.09/AR-MyCaLib.dat
+Physics-Analysis:	GoAT	TA2GoAT			/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-GoAT.dat
 ##
 ## Do some post initialisation...usually necessary
 Initialise:
@@ -78,11 +78,11 @@ Period:	  100000    root/macros/PeriodMacro.C	PeriodMacro()
 ##
 ## EndFile...each time an input data file is closed
 ##                  Macro File          Macro Procedure
-#EndFile:	    /disk/user/afzal/Mainz/acqu/acqu_user/root/macros/EndFileMacro.C	EndFileMacro()
+#EndFile:	    /hadron/pauli/acqu/acqu_user/root/macros/EndFileMacro.C	EndFileMacro()
 ##
 ## Finish...when all input data files processed
 ##                  Macro File          Macro Procedure
-Finish:		    /disk/user/afzal/Mainz/acqu/acqu_user/root/macros/FinishBatch.C	FinishBatch()
+Finish:		    /hadron/pauli/acqu/acqu_user/root/macros/FinishBatch.C	FinishBatch()
 ##
 ##
 ## Save all accepted events (ie those which pass all data cuts) to a

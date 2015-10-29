@@ -26,7 +26,7 @@
 ## NB with TAPS the number of ADCs = 29001
 ##
 ## Batch mode operation...redirect output directory for log files etc.
-BatchDir: /hiskp2/afzal/Mainz/test/
+BatchDir: /hiskp2/pauli
 ##
 ##        Tree Name     	# branches	Process Type
 Name:     RawEvent_AR_Save	3		Raw
@@ -37,18 +37,18 @@ Branch:	  Mk1_Header            120000
 ##
 ##
 ## Directory to save any created ROOT files (include final / )
-Directory: /hiskp2/afzal/
+Directory: /hiskp2/pauli/
 ##
 ##
 ## User-defined analysis class
 Analysis: TA2UserAnalysis
 ##
 ## Analysis setup file
-AnalysisSetup: /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis.dat
+AnalysisSetup: /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis.dat
 ##
 ##
 ## Set up of data files
-#ServerSetup: /disk/user/afzal/Mainz/acqu/acqu_user/temp/AR-Server.dat
-ServerSetup: /disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Server.dat
+#ServerSetup: /hadron/pauli/acqu/acqu_user/temp/AR-Server.dat
+ServerSetup: /hadron/pauli/acqu/acqu_user/data.2015.09/AR-Server.dat
 
 

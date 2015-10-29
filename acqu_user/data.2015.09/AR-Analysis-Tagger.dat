@@ -7,7 +7,7 @@
 Magnet:	1.8880042	1557.0
 #
 #         Name          Class Name      Setup file
-Detector: FPD		TA2Ladder 	/disk/user/afzal/Mainz/acqu/acqu_user/data.2015.09/AR-Analysis-Tagger-Ladder.dat
+Detector: FPD		TA2Ladder 	/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-Tagger-Ladder.dat
 Reconstruct:
 Initialise:
 #
