@@ -35,14 +35,14 @@ Use-CaLib-Veto:     0        0      0
 #CaLib-Target-Position: 1
 
 #CB energy calibration
-#CaLib-CB-Energy: 1
+CaLib-CB-Energy: 1
 
 # CB quadratic energy correction
 #              on/off  pi0_min  pi0_max  eta_min  eta_max
 #CaLib-CB-Quad: 1       100      150      480      575
 
 # CB time calibration
-#CaLib-CB-Time: 1
+CaLib-CB-Time: 1
 
 # CB risetime calibration
 #                 on/off  pi0_min  pi0_max  
@@ -62,7 +62,7 @@ Use-CaLib-Veto:     0        0      0
 #CaLib-TAPS-Quad: 1       110      160      500      600
 
 # TAPS time calibration
-#CaLib-TAPS-Time: 1
+CaLib-TAPS-Time: 1
 
 # TAPS PSA calibration
 #CaLib-TAPS-PSA: 1
@@ -71,22 +71,22 @@ Use-CaLib-Veto:     0        0      0
 #CaLib-TAPS-LED: 1
 
 # PID Phi calibration
-#CaLib-PID-Phi: 1
+CaLib-PID-Phi: 1
 
 # PID energy calibration
 #CaLib-PID-Energy: 1
 
 # PID time calibration
-#CaLib-PID-Time: 1
+CaLib-PID-Time: 1
 
 # veto-crystal correlation
-#CaLib-Veto-Corr: 1
+CaLib-Veto-Corr: 1
 
 # Veto energy
 #CaLib-Veto-Energy: 1
 
 # Veto time
-#CaLib-Veto-Time: 1
+CaLib-Veto-Time: 1
 
 # tagger time calibration
 #CaLib-Tagger-Time: 1
