@@ -2436,11 +2436,11 @@ void TA2MyCaLib::ReconstructPhysics()
                 Double_t time_2 = fVetoTime[fVetoHits[j]];
 
                 // fill time difference
-                fHCalib_Veto_Time->Fill(time_1 - time_2, fVetoHits[i]);
-                fHCalib_Veto_Time->Fill(time_2 - time_1, fVetoHits[j]);
+                if(!(fTrigger->IsTriggerL1(kPulser))==kFALSE)fHCalib_Veto_Time->Fill(time_1 - time_2, fVetoHits[i]);
+                if(!(fTrigger->IsTriggerL1(kPulser))==kFALSE)fHCalib_Veto_Time->Fill(time_2 - time_1, fVetoHits[j]);
             }
             
-            fHCalib_Veto_Time_Ind->Fill(time_1, fVetoHits[i]);
+            if((fTrigger->IsTriggerL1(kPulser))==kFALSE)fHCalib_Veto_Time_Ind->Fill(time_1, fVetoHits[i]);
         }
     }
     
