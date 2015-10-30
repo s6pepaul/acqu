@@ -30,7 +30,7 @@ Reconstruct:
 #Use-CaLib-CBEnergyPerRun: 	data/CBEnergyCorrectionPerRun.txt
 #RootTree-Output-Folder:         /hiskp2/afzal/Mainz/datatrees_may14_diamond_noLinPol_noMWPC/
 #RootTree-Output-Folder:         /hiskp2/spieker/Mainz/GoAT/trees/may14_butanol_diamond/
-RootTree-Output-Folder:		/hiskp2/afzal/
+RootTree-Output-Folder:		/hiskp2/pauli/
 
 RootTree-File-Name:		Acqu
 

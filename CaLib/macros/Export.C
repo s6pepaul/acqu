@@ -55,12 +55,16 @@ void Export()
     //TCMySQLManager::GetManager()->Export(tmp, 0, -1, "LD2_MC_May_09");
     
     // export CaLib data
-    sprintf(tmp, "backup_Apr_09_%s.root", tstamp);
-    TCMySQLManager::GetManager()->Export(tmp, 0, -1, "LH2_Apr_09");
+    //sprintf(tmp, "backup_Apr_09_%s.root", tstamp);
+    // TCMySQLManager::GetManager()->Export(tmp, 0, -1, "LH2_Apr_09");
     
     // export CaLib data
-    sprintf(tmp, "backup_MC_Apr_09_%s.root", tstamp);
-    TCMySQLManager::GetManager()->Export(tmp, 0, -1, "LH2_MC_Apr_09");
+    //sprintf(tmp, "backup_MC_Apr_09_%s.root", tstamp);
+    // TCMySQLManager::GetManager()->Export(tmp, 0, -1, "LH2_MC_Apr_09");
+
+    // export CaLib data
+    sprintf(tmp, "/hiskp2/pauli/backup/backup_Sep_15_%s.root", tstamp);
+    TCMySQLManager::GetManager()->Export(tmp, 0, -1, "2015-09_G_E_Proton");
      
     gSystem->Exit(0);
 }

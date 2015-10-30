@@ -59,7 +59,7 @@ Use-CaLib-Veto:     0        0      0
 
 # TAPS quadratic energy correction
 #                on/off  pi0_min  pi0_max  eta_min  eta_max
-CaLib-TAPS-Quad: 1       110      160      500      600
+#CaLib-TAPS-Quad: 1       110      160      500      600
 
 # TAPS time calibration
 #CaLib-TAPS-Time: 1

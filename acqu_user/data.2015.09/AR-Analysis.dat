@@ -63,8 +63,8 @@ Reconstruct-Analysis:
 ## Specify physics analysis
 ##                  	Name      Class                    	Config File
 #
-#Physics-Analysis:	CaLib	TA2MyCaLib	       	/hadron/pauli/acqu/acqu_user/data.2015.09/AR-MyCaLib.dat
-Physics-Analysis:	GoAT	TA2GoAT			/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-GoAT.dat
+Physics-Analysis:	CaLib	TA2MyCaLib	       	/hadron/pauli/acqu/acqu_user/data.2015.09/AR-MyCaLib.dat
+#Physics-Analysis:	GoAT	TA2GoAT			/hadron/pauli/acqu/acqu_user/data.2015.09/AR-Analysis-GoAT.dat
 ##
 ## Do some post initialisation...usually necessary
 Initialise:
@@ -148,27 +148,27 @@ Finish:		    /hadron/pauli/acqu/acqu_user/root/macros/FinishBatch.C	FinishBatch(
 ## Note that each batch of 32 has 20 defined and then 12 empty channels
 ##
 ## Block A
-#Display: ADC 20000 20499
+Display: ADC 20000 20499
 ## Block B
-#Display: ADC 21000 21499
+Display: ADC 21000 21499
 ## Block C
-#Display: ADC 22000 22499
+Display: ADC 22000 22499
 ## Block D
-#Display: ADC 23000 23499
+Display: ADC 23000 23499
 ## Block E
-#Display: ADC 24000 24499
+Display: ADC 24000 24499
 ## Block F
-#Display: ADC 25000 25499
+Display: ADC 25000 25499
 ##
 ########################################################################
 ##
 ## TAPS PbWO4 - QDCs, QDCSs
-#Display: ADC 29000 29143
+Display: ADC 29000 29143
 ##
 ## TAPS PbWO4 - TDCs
-#Display: MultiHit 29224 29295 1000 -10000 10000 0
-#Display: MultiHit 29224 29295 1000 -5000 -2000 1
-#Display: MultiHit 29224 29295 1000 -5000 -2000 2
+Display: MultiHit 29224 29295 1000 -10000 10000 0
+Display: MultiHit 29224 29295 1000 -5000 -2000 1
+Display: MultiHit 29224 29295 1000 -5000 -2000 2
 ##
 ########################################################################
 ##
@@ -176,25 +176,25 @@ Finish:		    /hadron/pauli/acqu/acqu_user/root/macros/FinishBatch.C	FinishBatch(
 ## Note that each batch of 32 has 16 defined and then 16 empty channels
 ##
 ## Block A
-#Display: ADC 26000 26239
+Display: ADC 26000 26239
 ## Block B
-#Display: ADC 26256 26495
+Display: ADC 26256 26495
 ## Block C
-#Display: ADC 27000 27239
+Display: ADC 27000 27239
 ## Block D
-#Display: ADC 27256 27495
+Display: ADC 27256 27495
 ## Block E
-#Display: ADC 28000 28239
+Display: ADC 28000 28239
 ## Block F
-#Display: ADC 28256 28495
+Display: ADC 28256 28495
 ##
 ## TAPS Veto for PbWO4 - ADCs
-#Display: ADC 29156 29190
+Display: ADC 29156 29190
 ##
 ## TAPS Veto for PbWO4 - TDCs
-#Display: MultiHit 29296 29317 1000 -10000 10000 0
-#Display: MultiHit 29296 29317 1000 -5000 -2000 1
-#Display: MultiHit 29296 29317 1000 -5000 -2000 2
+Display: MultiHit 29296 29317 1000 -10000 10000 0
+Display: MultiHit 29296 29317 1000 -5000 -2000 1
+Display: MultiHit 29296 29317 1000 -5000 -2000 2
 ########################################################################
 ## Display Scalers
 ########################################################################
